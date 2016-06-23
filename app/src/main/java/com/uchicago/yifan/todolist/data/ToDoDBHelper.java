@@ -30,8 +30,8 @@ public class ToDoDBHelper extends SQLiteOpenHelper{
 
                 // the ID of the location entry associated with this weather data
                 ToDoEntry.COLUMN_TITLE + " TEXT NOT NULL, " +
-                ToDoEntry.COLUMN_DATE + " INTEGER NOT NULL, " +
-                ToDoEntry.COLUMN_TIME + " INTEGER NOT NULL, " +
+                ToDoEntry.COLUMN_DATE + " TEXT NOT NULL, " +
+                ToDoEntry.COLUMN_TIME + " TEXT NOT NULL, " +
                 ToDoEntry.COLUMN_PRIORITY + " TEXT NOT NULL;";
 
         db.execSQL(SQL_CREATE_WEATHER_TABLE);
