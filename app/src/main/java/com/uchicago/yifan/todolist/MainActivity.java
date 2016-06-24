@@ -1,5 +1,6 @@
 package com.uchicago.yifan.todolist;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -49,6 +50,17 @@ public class MainActivity extends AppCompatActivity {
                 itemsAdapter.notifyDataSetChanged();
                 writeItems();
                 return true;
+            }
+        });
+
+        lvItems.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String todo_item = itemsAdapter.getItem(position);
+                Intent intent = new Intent(MainActivity.this, EditItemActivity.class)
+                        .putExtra(Intent.EXTRA_TEXT, todo_item);
+                startActivity(intent);
             }
         });
     }
