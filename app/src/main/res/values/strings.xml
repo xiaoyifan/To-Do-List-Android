@@ -1,4 +1,14 @@
 <resources>
     <string name="app_name">To do list</string>
     <string name="hint_text">Enter a new item</string>
+
+    <string name="label_name">Task Name</string>
+    <string name="label_date">Date</string>
+    <string name="label_priority">Priority</string>
+    <string name="label_status">Status</string>
+    <string name="label_note">Note</string>
+    <string name="label_time">Time</string>
+
+    <string name="edit_item">Edit</string>
+
 </resources>

@@ -9,6 +9,143 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.uchicago.yifan.todolist.EditItemActivity">
 
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/etTextEdit1"
+        android:maxLength="200"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_toRightOf="@+id/textView"
+        android:layout_toEndOf="@+id/textView"
+        android:singleLine="true"
+        android:paddingRight="10dp"
+        android:paddingEnd="10dp" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/label_name"
+        android:id="@+id/textView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignTop="@+id/etTextEdit1"
+        android:layout_alignBottom="@+id/etTextEdit1"
+        android:singleLine="true"
+        android:paddingTop="10dp"
+        android:paddingRight="20dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView3"
+        android:text="@string/label_priority"
+        android:layout_below="@+id/textView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="34dp" />
+
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/spinnerPriority"
+        android:spinnerMode="dropdown"
+        android:layout_alignTop="@+id/textView3"
+        android:layout_alignLeft="@+id/etTextEdit1"
+        android:layout_alignStart="@+id/etTextEdit1" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/label_date"
+        android:text="@string/label_date"
+        android:layout_below="@+id/textView3"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="34dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/label_date_edit"
+        android:text="2016-06-25"
+        android:layout_alignTop="@+id/label_date"
+        android:layout_alignLeft="@+id/spinnerPriority"
+        android:layout_alignStart="@+id/spinnerPriority" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/label_time"
+        android:text="@string/label_time"
+        android:layout_below="@+id/label_date"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="34dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/label_time_edit"
+        android:text="13:05"
+        android:layout_alignTop="@+id/label_time"
+        android:layout_alignLeft="@+id/label_date_edit"
+        android:layout_alignStart="@+id/label_date_edit" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textStatus"
+        android:text="@string/label_status"
+        android:layout_below="@+id/label_time"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="34dp" />
+
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/spinnerStatus"
+        android:spinnerMode="dropdown"
+        android:layout_alignTop="@+id/textStatus"
+        android:layout_alignLeft="@+id/label_time_edit"
+        android:layout_alignStart="@+id/label_time_edit" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/label_note"
+        android:text="@string/label_note"
+        android:layout_below="@+id/textStatus"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="34dp" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/text_note"
+        android:maxLines="5"
+        android:layout_alignTop="@+id/label_note"
+        android:layout_alignLeft="@+id/spinnerStatus"
+        android:layout_alignStart="@+id/spinnerStatus"
+        android:paddingRight="10dp"
+        android:paddingEnd="10dp"/>
+
+    <!--<Button-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="@string/edit_item"-->
+        <!--android:id="@+id/button"-->
+        <!--android:layout_below="@+id/numberPicker1"-->
+        <!--android:layout_marginTop="47dp"-->
+        <!--android:layout_toRightOf="@+id/numberPicker1"-->
+        <!--android:layout_alignRight="@+id/numberPicker2"-->
+        <!--android:layout_alignEnd="@+id/numberPicker2"-->
+        <!--android:onClick="onSubmitEdit" />-->
 
 </RelativeLayout>
