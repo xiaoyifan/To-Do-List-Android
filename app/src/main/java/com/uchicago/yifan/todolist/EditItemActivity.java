@@ -1,17 +1,24 @@
 package com.uchicago.yifan.todolist;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import com.uchicago.yifan.todolist.data.ToDoContract;
+
+import java.util.Calendar;
 
 public class EditItemActivity extends AppCompatActivity {
 
@@ -35,6 +42,57 @@ public class EditItemActivity extends AppCompatActivity {
 
 
 
+            }
+        });
+
+        final Calendar myCalendar = Calendar.getInstance();
+
+
+
+        final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear,
+                                  int dayOfMonth) {
+                // TODO Auto-generated method stub
+                myCalendar.set(Calendar.YEAR, year);
+                myCalendar.set(Calendar.MONTH, monthOfYear);
+                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                updateDateTextView(year, monthOfYear, dayOfMonth);
+            }
+
+        };
+
+        TextView dateTextView = (TextView)findViewById(R.id.label_date_edit);
+        assert dateTextView != null;
+        dateTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new DatePickerDialog(EditItemActivity.this, date, myCalendar
+                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+            }
+        });
+
+        TextView timeTextView = (TextView)findViewById(R.id.label_time_edit);
+
+        final TimePickerDialog.OnTimeSetListener time = new TimePickerDialog.OnTimeSetListener() {
+
+
+            @Override
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                myCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                myCalendar.set(Calendar.MINUTE, minute);
+                updateTimeTextView(hourOfDay, minute);
+            }
+        };
+
+        assert timeTextView != null;
+        timeTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new TimePickerDialog(EditItemActivity.this, time, myCalendar.get(Calendar.HOUR_OF_DAY),
+                        myCalendar.get(Calendar.MINUTE), DateFormat.is24HourFormat(EditItemActivity.this)).show();
             }
         });
 
@@ -69,10 +127,8 @@ public class EditItemActivity extends AppCompatActivity {
                 PriorityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 prioritySpinner.setAdapter(PriorityAdapter);
 
-                TextView dateTextView = (TextView)findViewById(R.id.label_date_edit);
-                dateTextView.setText(convertDateDataToStr(cursor.getString(2)));
 
-                TextView timeTextView = (TextView)findViewById(R.id.label_time_edit);
+                dateTextView.setText(convertDateDataToStr(cursor.getString(2)));
                 timeTextView.setText(convertTimeDataToStr(cursor.getString(3)));
 
                 Spinner statusSpinner = (Spinner)findViewById(R.id.spinnerStatus);
@@ -109,4 +165,13 @@ public class EditItemActivity extends AppCompatActivity {
         return hour + ":" + min;
     }
 
+    public void updateDateTextView(int year, int month, int day){
+        TextView dateTextView = (TextView)findViewById(R.id.label_date_edit);
+        dateTextView.setText(year + "-" + (month+1) + "-" + day);
+    }
+
+    public void updateTimeTextView(int hourOfDay, int minute){
+        TextView timeTextView = (TextView)findViewById(R.id.label_time_edit);
+        timeTextView.setText(hourOfDay + ":" + minute);
+    }
 }
