@@ -143,8 +143,7 @@
         android:id="@+id/button"
         android:layout_below="@+id/text_note"
         android:layout_marginTop="47dp"
-        android:layout_centerHorizontal="true"
-        android:onClick="onSubmitEdit" />
+        android:layout_centerHorizontal="true" />
         <!--android:layout_toRightOf="@+id/numberPicker1"-->
         <!--android:layout_alignRight="@+id/numberPicker2"-->
         <!--android:layout_alignEnd="@+id/numberPicker2"-->

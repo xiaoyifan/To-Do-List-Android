@@ -11,4 +11,16 @@
 
     <string name="edit_done">Done</string>
 
+    <string-array name="priority_array">
+        <item>Low</item>
+        <item>Medium</item>
+        <item>High</item>
+    </string-array>
+
+    <string-array name="status_array">
+        <item>To do</item>
+        <item>Doing</item>
+        <item>Done</item>
+    </string-array>
+
 </resources>
