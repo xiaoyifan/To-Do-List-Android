@@ -2,6 +2,8 @@ package com.uchicago.yifan.todolist;
 
 import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -18,6 +20,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Vector;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -31,7 +34,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         lvItems = (ListView) findViewById(R.id.lvItems);
         items = new ArrayList<>();
-        readItems();
+        //readItems();
+        readFromDB();
         itemsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, items);
         lvItems.setAdapter(itemsAdapter);
         setupListViewListener();
@@ -95,6 +99,37 @@ public class MainActivity extends AppCompatActivity {
         }catch (IOException e){
             items = new ArrayList<String>();
         }
+    }
+
+
+    private void readFromDB(){
+
+        Cursor cursor = getContentResolver().query(ToDoContract.ToDoEntry.CONTENT_URI, null, null, null, null);
+
+        Vector<ContentValues> vector = new Vector<ContentValues>(cursor.getCount());
+        if (cursor.moveToFirst()){
+            do{
+                ContentValues contentValue = new ContentValues();
+                DatabaseUtils.cursorRowToContentValues(cursor, contentValue);
+                vector.add(contentValue);
+            }
+            while (cursor.moveToNext());
+        }
+
+        items = convertContentValuesToStringFormat(vector);
+
+    }
+
+    private ArrayList<String> convertContentValuesToStringFormat(Vector<ContentValues> vector){
+
+        ArrayList<String> list = new ArrayList<>();
+        for (int i = 0; i < vector.size(); i++)
+        {
+          ContentValues todoValues = vector.elementAt(i);
+          list.add(todoValues.getAsString(ToDoContract.ToDoEntry.COLUMN_TITLE));
+        }
+
+        return list;
     }
 
     private void writeItems(){
