@@ -68,9 +68,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 
+                deleteItemFromDB(items.get(position));
                 items.remove(position);
                 itemsAdapter.notifyDataSetChanged();
-                deleteItemFromDB();
                 return true;
             }
         });
@@ -105,8 +105,9 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void deleteItemFromDB(){
+    private void deleteItemFromDB(String title){
 
+        getContentResolver().delete(ToDoContract.ToDoEntry.CONTENT_URI, ToDoContract.ToDoEntry.COLUMN_TITLE + " = ?", new String[]{title});
     }
 
     private ArrayList<String> convertContentValuesToStringFormat(Vector<ContentValues> vector){
