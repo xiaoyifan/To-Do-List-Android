@@ -31,10 +31,19 @@ public class MainActivity extends AppCompatActivity {
         lvItems = (ListView) findViewById(R.id.lvItems);
         items = new ArrayList<>();
         //readItems();
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
         readFromDB();
         itemsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, items);
         lvItems.setAdapter(itemsAdapter);
         setupListViewListener();
+
+        itemsAdapter.notifyDataSetChanged();
     }
 
     public void onAddItem(View v){
