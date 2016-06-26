@@ -38,6 +38,10 @@ public class ToDoContract {
         // Priority is stored as priority in String format.
         public static final String COLUMN_PRIORITY = "priority";
 
+        public static final String COLUMN_STATUS = "status";
+
+        public static final String COLUMN_NOTE = "note";
+
         public static Uri buildToDoItemUri(long id){
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }

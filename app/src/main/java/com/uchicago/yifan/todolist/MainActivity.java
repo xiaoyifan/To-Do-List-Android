@@ -1,5 +1,6 @@
 package com.uchicago.yifan.todolist;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -9,11 +10,14 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import com.uchicago.yifan.todolist.data.ToDoContract;
+
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -37,8 +41,26 @@ public class MainActivity extends AppCompatActivity {
         EditText etNewItem = (EditText)findViewById(R.id.etNewItem);
         String itemText = etNewItem.getText().toString();
         itemsAdapter.add(itemText);
-        writeItems();
+        //writeItems();
+        insertRecordToDB(itemText);
+
         etNewItem.setText("");
+    }
+
+    public void insertRecordToDB(String newTitle){
+
+        Calendar c = Calendar.getInstance();
+        int date = c.get(Calendar.YEAR) + c.get(Calendar.MONTH) + c.get(Calendar.DATE);
+        int time = c.get(Calendar.HOUR) + c.get(Calendar.MINUTE) + c.get(Calendar.SECOND);
+
+        ContentValues todoValues = new ContentValues();
+        todoValues.put(ToDoContract.ToDoEntry.COLUMN_TITLE,  newTitle);
+        todoValues.put(ToDoContract.ToDoEntry.COLUMN_TIME, time);
+        todoValues.put(ToDoContract.ToDoEntry.COLUMN_DATE, date);
+        todoValues.put(ToDoContract.ToDoEntry.COLUMN_NOTE, "");
+        todoValues.put(ToDoContract.ToDoEntry.COLUMN_PRIORITY, "high");
+        todoValues.put(ToDoContract.ToDoEntry.COLUMN_STATUS, "to do");
+        getContentResolver().insert(ToDoContract.ToDoEntry.CONTENT_URI, todoValues);
     }
 
     private void setupListViewListener(){
@@ -85,22 +107,5 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        return super.onCreateOptionsMenu(menu);
-//        getMenuInflater().inflate(R.menu.menu_main, menu);
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//
-//        int id = item.getItemId();
-//
-//        if (id == R.id.action_settings){
-//            return true;
-//        }
-//
-//        return super.onOptionsItemSelected(item);
-//    }
+
 }

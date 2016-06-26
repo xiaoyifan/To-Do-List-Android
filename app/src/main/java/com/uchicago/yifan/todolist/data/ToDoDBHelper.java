@@ -32,7 +32,9 @@ public class ToDoDBHelper extends SQLiteOpenHelper{
                 ToDoEntry.COLUMN_TITLE + " TEXT NOT NULL, " +
                 ToDoEntry.COLUMN_DATE + " TEXT NOT NULL, " +
                 ToDoEntry.COLUMN_TIME + " TEXT NOT NULL, " +
-                ToDoEntry.COLUMN_PRIORITY + " TEXT NOT NULL;";
+                ToDoEntry.COLUMN_STATUS + " TEXT NOT NULL, " +
+                ToDoEntry.COLUMN_NOTE + " TEXT NOT NULL, " +
+                ToDoEntry.COLUMN_PRIORITY + " TEXT NOT NULL );";
 
         db.execSQL(SQL_CREATE_WEATHER_TABLE);
     }
