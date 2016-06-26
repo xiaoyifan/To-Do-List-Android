@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
 
         Calendar c = Calendar.getInstance();
         int date = c.get(Calendar.YEAR)*10000 + c.get(Calendar.MONTH)*100 + c.get(Calendar.DATE);
-        int time = c.get(Calendar.HOUR_OF_DAY)*10000 + c.get(Calendar.MINUTE)*100 + c.get(Calendar.SECOND);
+        int time = c.get(Calendar.HOUR_OF_DAY)*100 + c.get(Calendar.MINUTE);
 
         ContentValues todoValues = new ContentValues();
         todoValues.put(ToDoContract.ToDoEntry.COLUMN_TITLE,  newTitle);

@@ -2,6 +2,7 @@ package com.uchicago.yifan.todolist;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -26,21 +27,39 @@ public class EditItemActivity extends AppCompatActivity {
     ArrayAdapter<CharSequence> PriorityAdapter;
     ArrayAdapter<CharSequence> StatusAdapter;
 
+    long recordId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_item);
 
         Button button = (Button) findViewById(R.id.button);
+        final TextView titleTextView = (TextView)findViewById(R.id.etTextEdit1);
+        final TextView dateTextView = (TextView)findViewById(R.id.label_date_edit);
+        final TextView timeTextView = (TextView)findViewById(R.id.label_time_edit);
+
+        final EditText noteText = (EditText)findViewById(R.id.text_note);
+
+        final Spinner prioritySpinner = (Spinner)findViewById(R.id.spinnerPriority);
+        final Spinner statusSpinner = (Spinner)findViewById(R.id.spinnerStatus);
+
         assert button != null;
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("dddddd");
 
+                ContentValues updateValues = new ContentValues();
+                updateValues.put(ToDoContract.ToDoEntry._ID, recordId);
+                updateValues.put(ToDoContract.ToDoEntry.COLUMN_TITLE, titleTextView.getText().toString());
+                updateValues.put(ToDoContract.ToDoEntry.COLUMN_STATUS, statusSpinner.getSelectedItem().toString());
+                updateValues.put(ToDoContract.ToDoEntry.COLUMN_PRIORITY, prioritySpinner.getSelectedItem().toString());
+                updateValues.put(ToDoContract.ToDoEntry.COLUMN_DATE, String.valueOf(getIntValueOfDate(dateTextView.getText().toString())) );
+                updateValues.put(ToDoContract.ToDoEntry.COLUMN_TIME, String.valueOf(getIntValueOfTime(timeTextView.getText().toString())));
+                updateValues.put(ToDoContract.ToDoEntry.COLUMN_NOTE,  noteText.getText().toString());
 
-
-
+                getContentResolver().update(ToDoContract.ToDoEntry.CONTENT_URI, updateValues,
+                        ToDoContract.ToDoEntry._ID + " = ?", new String[]{Long.toString(recordId)});
 
             }
         });
@@ -63,7 +82,6 @@ public class EditItemActivity extends AppCompatActivity {
 
         };
 
-        TextView dateTextView = (TextView)findViewById(R.id.label_date_edit);
         assert dateTextView != null;
         dateTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,8 +91,6 @@ public class EditItemActivity extends AppCompatActivity {
                         myCalendar.get(Calendar.DAY_OF_MONTH)).show();
             }
         });
-
-        TextView timeTextView = (TextView)findViewById(R.id.label_time_edit);
 
         final TimePickerDialog.OnTimeSetListener time = new TimePickerDialog.OnTimeSetListener() {
 
@@ -118,10 +134,11 @@ public class EditItemActivity extends AppCompatActivity {
             assert cursor != null;
             if (cursor.moveToFirst()){
 
+                recordId = cursor.getLong(0);
+
                 EditText titleText = (EditText) findViewById(R.id.etTextEdit1);
                 titleText.setText(cursor.getString(1));
 
-                Spinner prioritySpinner = (Spinner)findViewById(R.id.spinnerPriority);
                 PriorityAdapter = ArrayAdapter.createFromResource(this,
                         R.array.priority_array, android.R.layout.simple_spinner_item);
                 PriorityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -131,13 +148,11 @@ public class EditItemActivity extends AppCompatActivity {
                 dateTextView.setText(convertDateDataToStr(cursor.getString(2)));
                 timeTextView.setText(convertTimeDataToStr(cursor.getString(3)));
 
-                Spinner statusSpinner = (Spinner)findViewById(R.id.spinnerStatus);
                 StatusAdapter = ArrayAdapter.createFromResource(this,
                         R.array.status_array, android.R.layout.simple_spinner_item);
                 StatusAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 statusSpinner.setAdapter(StatusAdapter);
 
-                EditText noteText = (EditText)findViewById(R.id.text_note);
                 noteText.setText(cursor.getString(6));
             }
 
@@ -157,11 +172,10 @@ public class EditItemActivity extends AppCompatActivity {
     }
 
     private String convertTimeDataToStr(String time){
-        //214013
+        //2140
         int number  = Integer.parseInt(time);
-        int hour = number/10000;
-        int res = number - hour * 10000;
-        int min = res/100;
+        int hour = number/100;
+        int min = number - hour * 100;
         return hour + ":" + min;
     }
 
@@ -173,5 +187,15 @@ public class EditItemActivity extends AppCompatActivity {
     public void updateTimeTextView(int hourOfDay, int minute){
         TextView timeTextView = (TextView)findViewById(R.id.label_time_edit);
         timeTextView.setText(hourOfDay + ":" + minute);
+    }
+
+    private int getIntValueOfDate(String dateText){
+        String[] array = dateText.split("-");
+        return Integer.parseInt(array[0])*10000 + Integer.parseInt(array[1])*100 + Integer.parseInt(array[2]);
+    }
+
+    private int getIntValueOfTime(String timeText){
+        String[] array = timeText.split(":");
+        return Integer.parseInt(array[0])*100 + Integer.parseInt(array[1]);
     }
 }
