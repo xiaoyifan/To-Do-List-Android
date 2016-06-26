@@ -70,10 +70,10 @@ public class EditItemActivity extends AppCompatActivity {
                 prioritySpinner.setAdapter(PriorityAdapter);
 
                 TextView dateTextView = (TextView)findViewById(R.id.label_date_edit);
-                dateTextView.setText(cursor.getString(2));
+                dateTextView.setText(convertDateDataToStr(cursor.getString(2)));
 
                 TextView timeTextView = (TextView)findViewById(R.id.label_time_edit);
-                timeTextView.setText(cursor.getString(3));
+                timeTextView.setText(convertTimeDataToStr(cursor.getString(3)));
 
                 Spinner statusSpinner = (Spinner)findViewById(R.id.spinnerStatus);
                 StatusAdapter = ArrayAdapter.createFromResource(this,
@@ -88,6 +88,25 @@ public class EditItemActivity extends AppCompatActivity {
         }
 
 
+    }
+
+    private String convertDateDataToStr(String date){
+        //20160626
+        int number  = Integer.parseInt(date);
+        int year = number/10000;
+        int res = number - year * 10000;
+        int month = res/100;
+        int day = res - month*100;
+        return year + "-" + month + "-" + day;
+    }
+
+    private String convertTimeDataToStr(String time){
+        //214013
+        int number  = Integer.parseInt(time);
+        int hour = number/10000;
+        int res = number - hour * 10000;
+        int min = res/100;
+        return hour + ":" + min;
     }
 
 }
