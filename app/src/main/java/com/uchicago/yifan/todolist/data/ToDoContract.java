@@ -53,5 +53,9 @@ public class ToDoContract {
         public static String getTodoItemTimeFromUri(Uri uri){
             return uri.getPathSegments().get(2);
         }
+
+        public static String getTodoItemTitleFromUri(Uri uri){
+            return uri.getPathSegments().get(0);
+        }
     }
 }

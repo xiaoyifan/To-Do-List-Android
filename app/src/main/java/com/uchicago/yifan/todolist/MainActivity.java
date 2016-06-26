@@ -14,10 +14,6 @@ import android.widget.ListView;
 
 import com.uchicago.yifan.todolist.data.ToDoContract;
 
-import org.apache.commons.io.FileUtils;
-
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Vector;
@@ -54,8 +50,8 @@ public class MainActivity extends AppCompatActivity {
     public void insertRecordToDB(String newTitle){
 
         Calendar c = Calendar.getInstance();
-        int date = c.get(Calendar.YEAR) + c.get(Calendar.MONTH) + c.get(Calendar.DATE);
-        int time = c.get(Calendar.HOUR) + c.get(Calendar.MINUTE) + c.get(Calendar.SECOND);
+        int date = c.get(Calendar.YEAR)*10000 + c.get(Calendar.MONTH)*100 + c.get(Calendar.DATE);
+        int time = c.get(Calendar.HOUR_OF_DAY)*10000 + c.get(Calendar.MINUTE)*100 + c.get(Calendar.SECOND);
 
         ContentValues todoValues = new ContentValues();
         todoValues.put(ToDoContract.ToDoEntry.COLUMN_TITLE,  newTitle);
@@ -74,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
 
                 items.remove(position);
                 itemsAdapter.notifyDataSetChanged();
-                writeItems();
+                deleteItemFromDB();
                 return true;
             }
         });
@@ -91,17 +87,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void readItems(){
-        File filesDir = getFilesDir();
-        File todoFile = new File(filesDir, "todo.txt");
-        try{
-            items = new ArrayList<String>(FileUtils.readLines(todoFile));
-        }catch (IOException e){
-            items = new ArrayList<String>();
-        }
-    }
-
-
     private void readFromDB(){
 
         Cursor cursor = getContentResolver().query(ToDoContract.ToDoEntry.CONTENT_URI, null, null, null, null);
@@ -115,8 +100,12 @@ public class MainActivity extends AppCompatActivity {
             }
             while (cursor.moveToNext());
         }
-
+        cursor.close();
         items = convertContentValuesToStringFormat(vector);
+
+    }
+
+    private void deleteItemFromDB(){
 
     }
 
@@ -131,16 +120,5 @@ public class MainActivity extends AppCompatActivity {
 
         return list;
     }
-
-    private void writeItems(){
-        File filesDir = getFilesDir();
-        File todoFile = new File(filesDir, "todo.txt");
-        try{
-            FileUtils.writeLines(todoFile, items);
-        }catch (IOException e){
-            e.printStackTrace();
-        }
-    }
-
 
 }

@@ -22,7 +22,7 @@ public class ToDoProvider extends ContentProvider {
     private static final SQLiteQueryBuilder sToDoListQueryBuilder;
 
     static final int TODO = 100;
-    static final int TODO_WITH_DATE_TIME = 101;
+    static final int TODO_WITH_TITLE = 101;
 
     static {
         sToDoListQueryBuilder = new SQLiteQueryBuilder();
@@ -43,7 +43,7 @@ public class ToDoProvider extends ContentProvider {
 
         // For each type of URI you want to add, create a corresponding code.
         matcher.addURI(authority, ToDoContract.PATH_TODOLIST, TODO);
-        matcher.addURI(authority, ToDoContract.PATH_TODOLIST + "/#/#", TODO_WITH_DATE_TIME);
+        matcher.addURI(authority, ToDoContract.PATH_TODOLIST + "/*", TODO_WITH_TITLE);
 
         return matcher;
     }
@@ -53,13 +53,17 @@ public class ToDoProvider extends ContentProvider {
                     "." + ToDoContract.ToDoEntry.COLUMN_DATE + " = ? AND " +
                     ToDoContract.ToDoEntry.COLUMN_TIME + " = ? ";
 
+    private static final String sTitleSelection =
+            ToDoContract.ToDoEntry.TABLE_NAME +
+                    "." + ToDoContract.ToDoEntry.COLUMN_TITLE + " = ? ";
+
     @Override
     public boolean onCreate() {
         mOpenHelper = new ToDoDBHelper(getContext());
         return true;
     }
 
-    private Cursor getMovieWithDateAndTime(Uri uri, String[] projection, String sortOrder){
+    private Cursor getItemWithDateAndTime(Uri uri, String[] projection, String sortOrder){
         String todo_date = ToDoContract.ToDoEntry.getTodoItemDateFromUri(uri);
         String todo_time = ToDoContract.ToDoEntry.getTodoItemTimeFromUri(uri);
 
@@ -67,6 +71,18 @@ public class ToDoProvider extends ContentProvider {
                                            projection,
                                            sDateAndTimeSelection,
                                            new String[]{todo_date, todo_time},
+                                           null,
+                                           null,
+                                           sortOrder);
+    }
+
+    private Cursor getItemWithTitle(Uri uri, String[] projection, String sortOrder){
+
+        String todo_title = ToDoContract.ToDoEntry.getTodoItemTitleFromUri(uri);
+        return sToDoListQueryBuilder.query(mOpenHelper.getWritableDatabase(),
+                                           projection,
+                                           sTitleSelection,
+                                           new String[]{todo_title},
                                            null,
                                            null,
                                            sortOrder);
@@ -84,8 +100,8 @@ public class ToDoProvider extends ContentProvider {
                 retCursor = mOpenHelper.getReadableDatabase().query(ToDoContract.ToDoEntry.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
                 break;
             }
-            case TODO_WITH_DATE_TIME:{
-                retCursor = getMovieWithDateAndTime(uri, projection, sortOrder);
+            case TODO_WITH_TITLE:{
+                retCursor = getItemWithTitle(uri, projection, sortOrder);
                 break;
             }
             default:
@@ -105,7 +121,7 @@ public class ToDoProvider extends ContentProvider {
         switch (match){
             case TODO:
                 return ToDoContract.ToDoEntry.CONTENT_TYPE;
-            case TODO_WITH_DATE_TIME:
+            case TODO_WITH_TITLE:
                 return ToDoContract.ToDoEntry.CONTENT_ITEM_TYPE;
             default:
                 throw new UnsupportedOperationException("Unknown Uri: " + uri);
@@ -153,11 +169,10 @@ public class ToDoProvider extends ContentProvider {
                         ToDoContract.ToDoEntry.TABLE_NAME, selection, selectionArgs);
                 break;
             }
-            case TODO_WITH_DATE_TIME:{
-                String todo_date = ToDoContract.ToDoEntry.getTodoItemDateFromUri(uri);
-                String todo_time = ToDoContract.ToDoEntry.getTodoItemTimeFromUri(uri);
+            case TODO_WITH_TITLE:{
+                String todo_title = ToDoContract.ToDoEntry.getTodoItemTitleFromUri(uri);
                 rowsDeleted = db.delete(ToDoContract.ToDoEntry.TABLE_NAME,
-                        ToDoContract.ToDoEntry.COLUMN_DATE + " = ?" + ToDoContract.ToDoEntry.COLUMN_TIME + " = ?", new String[]{todo_date,todo_time});
+                        ToDoContract.ToDoEntry.COLUMN_TITLE + " = ?", new String[]{todo_title});
 
                 Log.d("DELETE: ", "todo item " + String.valueOf(ContentUris.parseId(uri)) + " is deleted.");
 
