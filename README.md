@@ -19,5 +19,8 @@ To do list by Yifan Xiao, Master of Computer Science from UChicago.
 
 Time spent: 15 hours in total, including implemented basic features and added extra functions. 
 
-Walk through:
+Walk through all user stories:
 
+![Video Walkthrough](demo.gif)
+
+GIF created with [LiceCap](http://www.cockos.com/licecap/).
