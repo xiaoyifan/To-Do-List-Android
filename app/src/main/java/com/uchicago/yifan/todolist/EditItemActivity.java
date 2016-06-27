@@ -6,8 +6,9 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.ActionBarActivity;
 import android.text.format.DateFormat;
+import android.view.Menu;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -21,7 +22,7 @@ import com.uchicago.yifan.todolist.data.ToDoContract;
 
 import java.util.Calendar;
 
-public class EditItemActivity extends AppCompatActivity {
+public class EditItemActivity extends ActionBarActivity {
 
     String itemTitle = "";
     ArrayAdapter<CharSequence> PriorityAdapter;
@@ -52,15 +53,15 @@ public class EditItemActivity extends AppCompatActivity {
                 ContentValues updateValues = new ContentValues();
                 updateValues.put(ToDoContract.ToDoEntry._ID, recordId);
                 updateValues.put(ToDoContract.ToDoEntry.COLUMN_TITLE, titleTextView.getText().toString());
-                updateValues.put(ToDoContract.ToDoEntry.COLUMN_STATUS, statusSpinner.getSelectedItem().toString());
-                updateValues.put(ToDoContract.ToDoEntry.COLUMN_PRIORITY, prioritySpinner.getSelectedItem().toString());
+                updateValues.put(ToDoContract.ToDoEntry.COLUMN_STATUS, String.valueOf(statusSpinner.getSelectedItemPosition()));
+                updateValues.put(ToDoContract.ToDoEntry.COLUMN_PRIORITY, String.valueOf(prioritySpinner.getSelectedItemPosition()));
                 updateValues.put(ToDoContract.ToDoEntry.COLUMN_DATE, String.valueOf(getIntValueOfDate(dateTextView.getText().toString())) );
                 updateValues.put(ToDoContract.ToDoEntry.COLUMN_TIME, String.valueOf(getIntValueOfTime(timeTextView.getText().toString())));
                 updateValues.put(ToDoContract.ToDoEntry.COLUMN_NOTE,  noteText.getText().toString());
 
                 getContentResolver().update(ToDoContract.ToDoEntry.CONTENT_URI, updateValues,
                         ToDoContract.ToDoEntry._ID + " = ?", new String[]{Long.toString(recordId)});
-
+                finish();
             }
         });
 
@@ -143,7 +144,7 @@ public class EditItemActivity extends AppCompatActivity {
                         R.array.priority_array, android.R.layout.simple_spinner_item);
                 PriorityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 prioritySpinner.setAdapter(PriorityAdapter);
-
+                prioritySpinner.setSelection(Integer.parseInt(cursor.getString(5)));
 
                 dateTextView.setText(convertDateDataToStr(cursor.getString(2)));
                 timeTextView.setText(convertTimeDataToStr(cursor.getString(3)));
@@ -152,6 +153,7 @@ public class EditItemActivity extends AppCompatActivity {
                         R.array.status_array, android.R.layout.simple_spinner_item);
                 StatusAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 statusSpinner.setAdapter(StatusAdapter);
+                statusSpinner.setSelection(Integer.parseInt(cursor.getString(4)));
 
                 noteText.setText(cursor.getString(6));
             }
@@ -159,6 +161,12 @@ public class EditItemActivity extends AppCompatActivity {
         }
 
 
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return super.onCreateOptionsMenu(menu);
     }
 
     private String convertDateDataToStr(String date){

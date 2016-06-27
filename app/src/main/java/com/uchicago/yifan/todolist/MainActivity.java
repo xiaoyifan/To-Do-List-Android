@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Vector;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends ActionBarActivity {
 
     ArrayList<String> items;
     ArrayAdapter<String> itemsAdapter;
@@ -67,8 +67,8 @@ public class MainActivity extends AppCompatActivity {
         todoValues.put(ToDoContract.ToDoEntry.COLUMN_TIME, time);
         todoValues.put(ToDoContract.ToDoEntry.COLUMN_DATE, date);
         todoValues.put(ToDoContract.ToDoEntry.COLUMN_NOTE, "");
-        todoValues.put(ToDoContract.ToDoEntry.COLUMN_PRIORITY, "high");
-        todoValues.put(ToDoContract.ToDoEntry.COLUMN_STATUS, "to do");
+        todoValues.put(ToDoContract.ToDoEntry.COLUMN_PRIORITY, "2");
+        todoValues.put(ToDoContract.ToDoEntry.COLUMN_STATUS, "0");
         getContentResolver().insert(ToDoContract.ToDoEntry.CONTENT_URI, todoValues);
     }
 
